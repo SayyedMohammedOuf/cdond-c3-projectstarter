@@ -153,7 +153,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum -y install tar gzip
+            apk add --update tar gzip
+            apk add --update aws-cli
             apk add --update ansible
       - run:
           name: Configure server
