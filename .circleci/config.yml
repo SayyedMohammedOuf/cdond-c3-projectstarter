@@ -189,17 +189,13 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/node:16.13.1
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            yum -y install tar gzip
-            yum -y install nodejs
-            yum -y install python
-            yum -y install awscli
-            yum -y install ansible
+            apt install -y tar gzip
       - attach_workspace:
           at: ~/project/.circleci/ansible/
       - run:
