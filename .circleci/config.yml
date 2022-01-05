@@ -189,15 +189,15 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: cimg/node:16.13.1
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            sudo apt install -y tar gzip
-            sudo apt install snapd
-            sudo snap install aws-cli --classic
+            apk add --update tar gzip
+            apk add --update npm
+            python -m pip install awscli
       - attach_workspace:
           at: ~/project/.circleci/ansible/
       - run:
