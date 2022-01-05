@@ -174,7 +174,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm audit fix
+            npm audit fix --force
             npm install
             npm run migrations > migrations_dump.txt
       - run:
@@ -195,9 +195,11 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip
-            python -m pip install awscli
-            apk add --update ansible
+            yum -y install tar gzip
+            yum -y install nodejs
+            yum -y install python
+            yum -y install awscli
+            yum -y install ansible
       - run:
           name: Get backend url
           command: |
@@ -229,6 +231,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update tar gzip
+            apk add --update npm
             python -m pip install awscli
             apk add --update ansible
       - run:
