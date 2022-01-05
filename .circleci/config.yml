@@ -192,8 +192,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/project/.circleci/ansible/
       - run:
           name: Install dependencies
           command: |
@@ -202,6 +200,8 @@ jobs:
             yum -y install python
             yum -y install awscli
             yum -y install ansible
+      - attach_workspace:
+          at: ~/project/.circleci/ansible/
       - run:
           name: Get backend url
           command: |
