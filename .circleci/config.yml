@@ -177,6 +177,9 @@ jobs:
             npm audit fix --force
             npm install
             npm run migrations > migrations_dump.txt
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
       - run:
           name: Send migration results to memstash
           command: |
