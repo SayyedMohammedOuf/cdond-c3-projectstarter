@@ -198,6 +198,7 @@ jobs:
             sudo apt install -y tar gzip
       - attach_workspace:
           at: ~/project/.circleci/ansible/
+      - aws-cli/setup
       - run:
           name: Get backend url
           command: |
