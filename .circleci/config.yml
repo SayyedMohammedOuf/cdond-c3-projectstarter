@@ -40,7 +40,10 @@ jobs:
           name: Back-end build
           command: |
             cd backend
+            npm audit fix
             npm install
+            npm audit fix --audit-level=critical --force
+            npm audit --audit-level=critical
             npm run build
       - save_cache:
           paths: [backend/node_modules]
@@ -174,8 +177,9 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm audit fix
             npm install
+            npm audit fix --audit-level=critical --force
+            npm audit --audit-level=critical
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to memstash
