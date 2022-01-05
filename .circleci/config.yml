@@ -196,9 +196,9 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt install -y tar gzip
+            sudo apt install awscli
       - attach_workspace:
           at: ~/project/.circleci/ansible/
-      - aws-cli/setup
       - run:
           name: Get backend url
           command: |
