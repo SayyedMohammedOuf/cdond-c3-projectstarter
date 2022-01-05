@@ -196,7 +196,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt install -y tar gzip
-            sudo apt install awscli
+            sudo snap install aws-cli --classic
       - attach_workspace:
           at: ~/project/.circleci/ansible/
       - run:
