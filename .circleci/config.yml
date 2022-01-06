@@ -26,9 +26,9 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            cd backend
+            if grep -q "has been executed successfully." migrations_dump.txt
             then
-              cd ~/project/backend
               npm install
               npm run migration:revert
             fi
@@ -297,6 +297,7 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress')
             export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
       - run:
           name: Backend smoke test.
           command: |
