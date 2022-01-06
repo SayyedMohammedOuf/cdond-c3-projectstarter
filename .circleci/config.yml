@@ -194,7 +194,7 @@ jobs:
             echo "LS PATH -------"
             pwd
             ls
-            cat /tmp/ansible/inventory.txt
+            cat /tmp/.circleci/ansible/inventory.txt
             ansible-playbook -i /tmp/.circleci/ansible/inventory.txt configure-server.yml
 #            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
