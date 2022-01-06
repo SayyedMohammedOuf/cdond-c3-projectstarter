@@ -160,9 +160,9 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: ansible
+          root: .circleci/ansible
           paths:
-            - .circleci/ansible/inventory.txt
+            - inventory.txt
 #      - persist_to_workspace:
 #          root: ~/
 #          paths:
@@ -180,7 +180,7 @@ jobs:
 #      - attach_workspace:
 #          at: ~/project/.circleci/ansible/
       - attach_workspace:
-          at: /tmp/ansible
+          at: /tmp/.circleci/ansible
       - run:
           name: Install dependencies
           command: |
@@ -195,7 +195,7 @@ jobs:
             pwd
             ls
             cat /tmp/ansible/inventory.txt
-            ansible-playbook -i /tmp/ansible/inventory.txt configure-server.yml
+            ansible-playbook -i /tmp/.circleci/ansible/inventory.txt configure-server.yml
 #            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -237,7 +237,9 @@ jobs:
             apk add --update npm
             python -m pip install awscli
       - attach_workspace:
-          at: ~/project/.circleci/ansible/
+          at: /tmp/.circleci/ansible
+#      - attach_workspace:
+#          at: ~/project/.circleci/ansible/
       - run:
           name: Get backend url
           command: |
@@ -267,7 +269,9 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["ff:22:38:12:9c:7d:9d:87:d7:fc:b1:7a:d5:07:5c:78"]
       - attach_workspace:
-          at: ~/project/.circleci/ansible/
+          at: /tmp/.circleci/ansible
+#      - attach_workspace:
+#          at: ~/project/.circleci/ansible/
       - run:
           name: Install dependencies
           command: |
