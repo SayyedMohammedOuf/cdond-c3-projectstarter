@@ -157,6 +157,8 @@ jobs:
             aws ec2 describe-instances \
                --query 'Reservations[*].Instances[*].PublicIpAddress' \
                --output text >> .circleci/ansible/inventory.txt
+            echo "Contents  of the inventory.txt file is -------"
+            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -183,6 +185,8 @@ jobs:
           name: Configure server
           command: |
             cd .circleci/ansible
+            echo "LS PATH -------"
+            cat .circleci/ansible/inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
