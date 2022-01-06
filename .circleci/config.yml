@@ -160,9 +160,13 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: ~/
+          root: ansible
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - .circleci/ansible/inventory.txt
+#      - persist_to_workspace:
+#          root: ~/
+#          paths:
+#            - project/.circleci/ansible/inventory.txt
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
@@ -173,8 +177,10 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["ff:22:38:12:9c:7d:9d:87:d7:fc:b1:7a:d5:07:5c:78"]
+#      - attach_workspace:
+#          at: ~/project/.circleci/ansible/
       - attach_workspace:
-          at: ~/project/.circleci/ansible/
+          at: /tmp/ansible
       - run:
           name: Install dependencies
           command: |
@@ -188,8 +194,9 @@ jobs:
             echo "LS PATH -------"
             pwd
             ls
-            cat inventory.txt
-            ansible-playbook -i inventory.txt configure-server.yml
+            cat /tmp/ansible/inventory.txt
+            ansible-playbook -i /tmp/ansible/inventory.txt configure-server.yml
+#            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
