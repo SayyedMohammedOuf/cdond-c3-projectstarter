@@ -26,8 +26,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl -H "token: 7933fe63-4687-4fa1-8426-aa25aa1730ec" --request GET https://api.memstash.io/values/migration_<< parameters.workflow_id >>)
-            if (( $SUCCESS == 1 ));
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               cd ~/project/backend
               npm install
@@ -201,15 +200,16 @@ jobs:
             cd backend
             npm install
             npm run migrations > migrations_dump.txt
+            cat migrations_dump.txt
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
       - run:
-          name: Send migration results to memstash
+          name: check successfull migration
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-              curl -H "Content-Type: text/plain" -H "token: 7933fe63-4687-4fa1-8426-aa25aa1730ec" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              echo "Migrations done successfully!"
             fi
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
