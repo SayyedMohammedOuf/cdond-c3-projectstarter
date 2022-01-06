@@ -163,10 +163,6 @@ jobs:
           root: .circleci/ansible
           paths:
             - inventory.txt
-#      - persist_to_workspace:
-#          root: ~/
-#          paths:
-#            - project/.circleci/ansible/inventory.txt
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
@@ -177,8 +173,6 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["ff:22:38:12:9c:7d:9d:87:d7:fc:b1:7a:d5:07:5c:78"]
-#      - attach_workspace:
-#          at: ~/project/.circleci/ansible/
       - attach_workspace:
           at: /tmp/.circleci/ansible
       - run:
@@ -196,7 +190,6 @@ jobs:
             ls
             cat /tmp/.circleci/ansible/inventory.txt
             ansible-playbook -i /tmp/.circleci/ansible/inventory.txt configure-server.yml
-#            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
@@ -213,6 +206,7 @@ jobs:
             cd backend
             npm install
             npm run migrations > migrations_dump.txt
+            echo "Migration Result:------"
             cat migrations_dump.txt
       - save_cache:
           paths: [backend/node_modules]
@@ -223,6 +217,9 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               echo "Migrations done successfully!"
+            else
+              echo "Migrations Failed"
+              return 1
             fi
 
   deploy-frontend:
@@ -238,8 +235,6 @@ jobs:
             python -m pip install awscli
       - attach_workspace:
           at: /tmp/.circleci/ansible
-#      - attach_workspace:
-#          at: ~/project/.circleci/ansible/
       - run:
           name: Get backend url
           command: |
@@ -270,8 +265,6 @@ jobs:
           fingerprints: ["ff:22:38:12:9c:7d:9d:87:d7:fc:b1:7a:d5:07:5c:78"]
       - attach_workspace:
           at: /tmp/.circleci/ansible
-#      - attach_workspace:
-#          at: ~/project/.circleci/ansible/
       - run:
           name: Install dependencies
           command: |
