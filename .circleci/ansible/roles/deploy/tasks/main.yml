@@ -1,4 +1,11 @@
 ---
+- name: "copy backend file"
+  become: true
+  copy:
+    src: /root/project/backend
+    dest: /root
+    force: no
+
 - name: "Start App"
   become: true
   shell: |
