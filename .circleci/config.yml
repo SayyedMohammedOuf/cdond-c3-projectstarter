@@ -193,13 +193,13 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-#  run-migrations:
-#    docker:
-#      - image: circleci/node:12.18.4
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [backend-build]
+  run-migrations:
+    docker:
+      - image: circleci/node:12.18.4
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
 #      - run:
 #          name: Run migrations
 #          command: |
@@ -208,9 +208,9 @@ jobs:
 #            npm run migrations > migrations_dump.txt
 #            echo "Migration Result:------"
 #            cat migrations_dump.txt
-#      - save_cache:
-#          paths: [backend/node_modules]
-#          key: backend-build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
 #      - run:
 #          name: check successfull migration
 #          command: |
@@ -347,9 +347,11 @@ workflows:
               only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-#      - run-migrations:
-#          requires: [configure-infrastructure]
-      - deploy-frontend
-      - deploy-backend
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
