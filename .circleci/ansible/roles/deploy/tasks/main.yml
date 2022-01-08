@@ -1,4 +1,5 @@
 ---
+
 - name: create backend directory
   become: yes
   file:
@@ -18,7 +19,6 @@
     cd ~/backend
     tar -vxf artifact.tar.gz
     rm -f artifact.tar.gz
-
 - name: start app
   become: yes
   shell: |
