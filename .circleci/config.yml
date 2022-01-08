@@ -182,6 +182,20 @@ jobs:
             python -m pip install awscli
             apk add --update ansible
       - run:
+          name: Set global vars
+          command: |
+            echo ENVIRONMENT=production > "backend/.env"
+            echo TYPEORM_CONNECTION=postgres >> "backend/.env"
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> "backend/.env"
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> "backend/.env"
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
+            echo NODE_ENV=production >> "backend/.env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
+      - run:
           name: Configure server
           command: |
             cd .circleci/ansible
@@ -264,28 +278,36 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["ff:22:38:12:9c:7d:9d:87:d7:fc:b1:7a:d5:07:5c:78"]
       - attach_workspace:
-          at: /tmp/.circleci/ansible
+          at: ~/
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip
-            apk add --update npm
-            python -m pip install awscli
-            apk add --update ansible
+            apk add --update ansible tar gzip ansible nodejs npm curl
+            pip install awscli
       - run:
           name: Deploy backend
           command: |
             cd backend
             npm i
+            echo ENVIRONMENT=production > ".env"
+            echo TYPEORM_CONNECTION=postgres >> ".env"
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> ".env"
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
+            echo NODE_ENV=production >> ".env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
             npm run build
-            cp package* ./dist
+            npm run prestart:prod
             cd ..
-            # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
-            cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
-            cat /tmp/.circleci/ansible/inventory.txt
-            ansible-playbook -i /tmp/.circleci/ansible/inventory.txt deploy-backend.yml
+            cat ~/ansible/inventory.txt
+            tar -cvf backend.tar backend
+            cp backend.tar ~/backend.tar
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ~/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 #      - revert-migrations:
