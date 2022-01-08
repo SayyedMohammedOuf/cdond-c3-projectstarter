@@ -278,7 +278,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["ff:22:38:12:9c:7d:9d:87:d7:fc:b1:7a:d5:07:5c:78"]
       - attach_workspace:
-          at: ~/
+          at: /tmp/.circleci/ansible
       - run:
           name: Install dependencies
           command: |
@@ -304,10 +304,10 @@ jobs:
             npm run prestart:prod
             cd ..
             echo "Contents  of the inventory.txt file is -------"
-            cat ~/ansible/inventory.txt
+            cat /tmp/.circleci/ansible/inventory.txt
             tar -cvf backend.tar backend
             cp backend.tar ~/backend.tar
-            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ~/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 #      - revert-migrations:
