@@ -262,7 +262,6 @@ jobs:
           fingerprints: ["ff:22:38:12:9c:7d:9d:87:d7:fc:b1:7a:d5:07:5c:78"]
       - attach_workspace:
           at: ~/
-#          at: /tmp/.circleci/ansible
       - run:
           name: Install dependencies
           command: |
@@ -293,12 +292,9 @@ jobs:
             cd ..
             tar -C backend -czvf artifact.tar.gz .
             export ANSIBLE_HOST_KEY_CHECKING=False
-#            cd .circleci/ansible
             cd ~/project/.circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
-#            cat /tmp/.circleci/ansible/inventory.txt
             cat inventory.txt
-#            ansible-playbook -i /tmp/.circleci/ansible/inventory.txt deploy-backend.yml
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
