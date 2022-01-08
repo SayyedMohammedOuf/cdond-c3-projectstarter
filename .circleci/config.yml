@@ -27,11 +27,8 @@ commands:
           when: on_fail
           command: |
             cd backend
-#            if grep -q "has been executed successfully." migrations_dump.txt
-#            then
             npm install
             npm run migration:revert
-#            fi
             
 jobs:
   build-frontend:
