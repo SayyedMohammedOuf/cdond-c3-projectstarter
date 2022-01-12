@@ -209,13 +209,13 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Run migrations
           command: |
             cd backend
-            rm package-lock.json
             npm install
-            npm run build
             npm run migrations > ../.circleci/migrations_dump.txt
             echo "Migration Result:------"
             cat ../.circleci/migrations_dump.txt
