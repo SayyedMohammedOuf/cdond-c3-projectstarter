@@ -213,7 +213,6 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm audit fix --audit-level=critical --force
             npm install
             npm run migrations > ../.circleci/migrations_dump.txt
             echo "Migration Result:------"
