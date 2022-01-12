@@ -63,6 +63,7 @@ jobs:
           name: Back-end build
           command: |
             cd backend
+            npm install
             npm run build
       - save_cache:
           paths: [backend/node_modules]
@@ -213,9 +214,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm audit fix --audit-level=critical --force
             npm install
-            npm run build
             npm run migrations > ../.circleci/migrations_dump.txt
             echo "Migration Result:------"
             cat ../.circleci/migrations_dump.txt
@@ -403,12 +402,13 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
+#      - scan-backend:
+#          requires: [build-backend]
+#      - scan-frontend:
+#          requires: [build-frontend]
       - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          requires: [test-frontend, test-backend]
+#          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
             branches:
               only: [master]
