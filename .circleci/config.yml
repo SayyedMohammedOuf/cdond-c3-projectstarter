@@ -31,7 +31,6 @@ commands:
             if grep -q "has been executed successfully." /tmp/.circleci/migrations_dump.txt
             then
               cd backend
-              npm install
               npm run migration:revert
             fi
             
@@ -214,7 +213,6 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install
             npm run migrations > ../.circleci/migrations_dump.txt
             echo "Migration Result:------"
             cat ../.circleci/migrations_dump.txt
@@ -285,7 +283,6 @@ jobs:
           name: Deploy backend
           command: |
             cd backend
-            npm i
             echo ENVIRONMENT=production > ".env"
             echo TYPEORM_CONNECTION=postgres >> ".env"
             echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
