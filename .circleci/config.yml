@@ -285,6 +285,7 @@ jobs:
           name: Deploy backend
           command: |
             cd backend
+            npm i
             echo ENVIRONMENT=production > ".env"
             echo TYPEORM_CONNECTION=postgres >> ".env"
             echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
