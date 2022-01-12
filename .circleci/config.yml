@@ -22,8 +22,6 @@ commands:
       workflow_id:
         type: string
     steps:
-      - attach_workspace:
-          at: /tmp/.circleci
       - run:
           name: Revert migrations
           when: on_fail
