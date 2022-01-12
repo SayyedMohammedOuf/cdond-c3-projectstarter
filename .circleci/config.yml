@@ -206,14 +206,13 @@ jobs:
 
   run-migrations:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            apk add --update nodejs npm
-            pip install awscli
+            yarn add aws
       - run:
           name: Run migrations
           command: |
