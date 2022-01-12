@@ -206,14 +206,14 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:12.18.4
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
           name: Run migrations
           command: |
             cd backend
-            npm run build
+            npm install
             npm run migrations > ../.circleci/migrations_dump.txt
             echo "Migration Result:------"
             cat ../.circleci/migrations_dump.txt
