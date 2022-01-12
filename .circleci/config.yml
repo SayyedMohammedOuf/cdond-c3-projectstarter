@@ -210,6 +210,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: |
+            npm install -g aws-cli
+      - run:
           name: Run migrations
           command: |
             cd backend
