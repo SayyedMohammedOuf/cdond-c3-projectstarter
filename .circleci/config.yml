@@ -23,7 +23,7 @@ commands:
         type: string
     steps:
       - attach_workspace:
-        at: /tmp/.circleci
+          at: /tmp/.circleci
       - run:
           name: Revert migrations
           when: on_fail
