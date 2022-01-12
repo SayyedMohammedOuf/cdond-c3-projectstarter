@@ -213,6 +213,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
+            npm run build
             npm run migrations > ../.circleci/migrations_dump.txt
             echo "Migration Result:------"
             cat ../.circleci/migrations_dump.txt
@@ -230,6 +231,8 @@ jobs:
           root: .circleci
           paths:
             - migrations_dump.txt
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
