@@ -247,7 +247,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export PUBLIC_DNS_NAME=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicDnsName' --output text | tr '\r\n' ' ')
+            export PUBLIC_DNS_NAME=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicDnsName' --output text | tr '\r\n' ' ' | awk '{$1=$1};1')
             export API_URL="http://${PUBLIC_DNS_NAME}:3030"
             echo "API URL:-->  ${API_URL}"
             echo API_URL="${API_URL}" >> frontend/.env
