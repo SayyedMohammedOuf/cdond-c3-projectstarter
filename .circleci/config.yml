@@ -249,8 +249,7 @@ jobs:
           command: |
             export PUBLIC_DNS_NAME=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicDnsName' --output text)
             export API_URL="http://${PUBLIC_DNS_NAME}:3030"
-            echo "${API_URL}"
-            echo API_URL="http://${PUBLIC_DNS_NAME}:3030" >> frontend/.env
+            echo API_URL >> frontend/.env
             cat frontend/.env
       - run:
           name: Deploy frontend objects
